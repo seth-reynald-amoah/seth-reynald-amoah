@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Bills Macrocredit — App Screens</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#152922;
+    --forest:#0F3D2E;
+    --forest-deep:#0A2A20;
+    --paper:#EEF0EA;
+    --card:#FFFFFF;
+    --gold:#E1A13D;
+    --gold-soft:#F6E4C4;
+    --clay:#C4622D;
+    --line:#D8DCD2;
+    --muted:#6B7A70;
+    --good:#3F8F63;
+    --font-display:'Fraunces', serif;
+    --font-body:'IBM Plex Sans', sans-serif;
+    --font-mono:'IBM Plex Mono', monospace;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    font-family:var(--font-body);
+    color:var(--ink);
+    padding:56px 40px 100px;
+  }
+  .intro{
+    max-width:760px;
+    margin:0 auto 64px;
+  }
+  .eyebrow{
+    font-family:var(--font-mono);
+    font-size:12px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--forest);
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:22px;height:2px;
+    background:var(--gold);
+    display:inline-block;
+  }
+  h1.title{
+    font-family:var(--font-display);
+    font-optical-sizing:auto;
+    font-weight:600;
+    font-size:clamp(34px,5vw,54px);
+    line-height:1.02;
+    margin:14px 0 12px;
+    color:var(--forest-deep);
+    letter-spacing:-0.01em;
+  }
+  .tagline{
+    font-family:var(--font-display);
+    font-style:italic;
+    font-weight:400;
+    font-size:20px;
+    color:var(--clay);
+    margin:0 0 20px;
+  }
+  .sub{
+    font-size:15.5px;
+    line-height:1.65;
+    color:var(--ink);
+    max-width:620px;
+  }
+  .sub b{color:var(--forest-deep);}
+
+  .rail{
+    display:flex;
+    gap:32px;
+    overflow-x:auto;
+    padding:8px 4px 40px;
+    scroll-snap-type:x proximity;
+  }
+  .section-label{
+    max-width:1400px;
+    margin:0 auto 18px;
+    display:flex;
+    align-items:baseline;
+    gap:14px;
+  }
+  .section-label .num{
+    font-family:var(--font-mono);
+    font-size:13px;
+    color:var(--gold);
+    background:var(--forest-deep);
+    padding:3px 9px;
+    border-radius:3px;
+  }
+  .section-label h2{
+    font-family:var(--font-display);
+    font-weight:600;
+    font-size:22px;
+    margin:0;
+    color:var(--forest-deep);
+  }
+  .section-wrap{max-width:1400px;margin:0 auto;}
+
+  /* ---- phone frame ---- */
+  .phone{
+    flex:0 0 auto;
+    scroll-snap-align:start;
+    width:300px;
+  }
+  .phone-cap{
+    font-family:var(--font-mono);
+    font-size:11.5px;
+    color:var(--muted);
+    margin-bottom:10px;
+    letter-spacing:.02em;
+  }
+  .screen{
+    width:300px;
+    height:630px;
+    background:var(--card);
+    border-radius:34px;
+    border:1px solid var(--line);
+    box-shadow:0 24px 40px -20px rgba(15,61,46,.25);
+    overflow:hidden;
+    position:relative;
+    display:flex;
+    flex-direction:column;
+  }
+  .notch{
+    height:28px;
+    background:var(--forest-deep);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0;
+  }
+  .notch .pill{
+    width:70px;height:6px;background:#1b4234;border-radius:4px;
+  }
+  .status{
+    height:34px;
+    background:var(--forest-deep);
+    color:#EFE9DA;
+    font-family:var(--font-mono);
+    font-size:11px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:0 18px;
+    flex-shrink:0;
+  }
+  .body{
+    flex:1;
+    overflow:hidden;
+    position:relative;
+    background:var(--paper);
+  }
+
+  /* shared UI atoms */
+  .app-header{
+    background:var(--forest-deep);
+    color:#F3EFE3;
+    padding:20px 20px 26px;
+  }
+  .app-header .greet{font-size:12.5px;color:#B9CBBF;font-family:var(--font-mono);letter-spacing:.04em;}
+  .app-header .name{font-family:var(--font-display);font-weight:600;font-size:22px;margin-top:2px;}
+  .bell{
+    position:absolute; top:20px; right:20px;
+    width:30px;height:30px;border-radius:50%;
+    background:rgba(255,255,255,.08);
+    display:flex;align-items:center;justify-content:center;
+  }
+
+  .card{
+    background:var(--card);
+    border-radius:16px;
+    padding:16px 18px;
+    box-shadow:0 8px 18px -12px rgba(21,41,34,.25);
+  }
+
+  .btn{
+    display:flex;align-items:center;justify-content:center;
+    font-family:var(--font-body);font-weight:600;font-size:14px;
+    padding:14px;border-radius:12px;
+    background:var(--forest);
+    color:#F3EFE3;
+  }
+  .btn.ghost{
+    background:transparent;border:1.5px solid var(--forest);color:var(--forest);
+  }
+  .btn.gold{
+    background:var(--gold); color:var(--forest-deep);
+  }
+
+  .field{
+    border:1.5px solid var(--line);
+    border-radius:11px;
+    padding:12px 14px;
+    font-size:13.5px;
+    color:var(--ink);
+    background:#fff;
+  }
+  .field-label{
+    font-size:11.5px; font-weight:600; color:var(--forest);
+    text-transform:uppercase; letter-spacing:.05em; margin-bottom:6px;
+  }
+
+  /* ring - signature motif */
+  .ring-wrap{position:relative;width:104px;height:104px;margin:0 auto;}
+  .ring-wrap svg{transform:rotate(-90deg);}
+  .ring-center{
+    position:absolute; inset:0; display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+  }
+  .ring-center .pct{font-family:var(--font-display);font-weight:600;font-size:22px;color:var(--forest-deep);}
+  .ring-center .lbl{font-size:9.5px;color:var(--muted);font-family:var(--font-mono);}
+
+  .tag{
+    font-family:var(--font-mono);
+    font-size:10px;
+    padding:3px 9px;
+    border-radius:20px;
+    letter-spacing:.03em;
+  }
+  .tag.on{background:#E4F0E8;color:var(--good);}
+  .tag.wait{background:var(--gold-soft);color:#8A5A17;}
+  .tag.off{background:#F0E9DE;color:var(--muted);}
+
+  footer{
+    max-width:1400px;margin:70px auto 0;
+    border-top:1px solid var(--line);
+    padding-top:24px;
+    font-size:13px;color:var(--muted);
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
+  }
+  footer b{color:var(--forest-deep);}
+</style>
+</head>
+<body>
+
+<div class="intro">
+  <div class="eyebrow">Bills Macrocredit — Mobile Application</div>
+  <h1 class="title">Screen designs, not screen descriptions.</h1>
+  <p class="tagline">Fast loans. Secure payments. Better financial future.</p>
+  <p class="sub">This is the first working visual pass on the app: <b>eight core screens</b>, one connected system — dark forest header for trust and weight, warm gold for progress and money-in-motion, and a repayment ring that appears everywhere a customer needs to know "where do I stand." Built to replace the text-only screen list with something you can actually put in front of Bills Macrocredit's management.</p>
+</div>
+
+<!-- ============ CUSTOMER APP ============ -->
+<div class="section-wrap">
+<div class="section-label"><span class="num">01</span><h2>Customer app</h2></div>
+</div>
+<div class="rail">
+
+  <!-- SPLASH -->
+  <div class="phone">
+    <div class="phone-cap">Welcome screen</div>
+    <div class="screen">
+      <div class="notch"><div class="pill"></div></div>
+      <div class="body" style="background:var(--forest-deep);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 30px;">
+        <svg width="56" height="56" viewBox="0 0 56 56" fill="none">
+          <rect x="2" y="2" width="52" height="52" rx="14" stroke="#E1A13D" stroke-width="2.5"/>
+          <path d="M28 15 L28 41 M18 24 L38 24" stroke="#E1A13D" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+        <div style="font-family:var(--font-display);font-weight:600;font-size:26px;color:#F3EFE3;margin-top:18px;text-align:center;">Bills<br>Macrocredit</div>
+        <div style="font-family:var(--font-display);font-style:italic;color:var(--gold);font-size:14px;margin-top:8px;">Fast loans. Secure payments.</div>
+        <div class="btn gold" style="width:100%;margin-top:44px;">Get started</div>
+        <div style="color:#9DB2A6;font-size:12px;margin-top:14px;">Already registered? <span style="color:#F3EFE3;font-weight:600;">Sign in</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOGIN -->
+  <div class="phone">
+    <div class="phone-cap">Sign in</div>
+    <div class="screen">
+      <div class="notch"><div class="pill"></div></div>
+      <div class="status"><span>9:41</span><span>●●● 4G 100%</span></div>
+      <div class="body" style="padding:30px 22px;">
+        <div style="font-family:var(--font-display);font-weight:600;font-size:24px;color:var(--forest-deep);margin-bottom:4px;">Welcome back</div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:26px;">Sign in to manage your loan</div>
+
+        <div class="field-label">Phone number</div>
+        <div class="field" style="margin-bottom:16px;color:var(--muted);">+233 24 000 0000</div>
+
+        <div class="field-label">PIN</div>
+        <div class="field" style="margin-bottom:8px;letter-spacing:4px;">••••••</div>
+        <div style="text-align:right;font-size:11.5px;color:var(--forest);font-weight:600;margin-bottom:22px;">Forgot PIN?</div>
+
+        <div class="btn" style="margin-bottom:14px;">Sign in</div>
+        <div class="btn ghost">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" style="margin-right:8px;"><path d="M12 2a5 5 0 015 5c0 2.2-1.5 4-3.5 4.7 2.9.9 5 3.5 5 6.8v1.5H5.5V18.5c0-3.3 2.1-5.9 5-6.8C8.5 11 7 9.2 7 7a5 5 0 015-5z" fill="var(--forest)"/></svg>
+          Use Face ID
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOME DASHBOARD -->
+  <div class="phone">
+    <div class="phone-cap">Home dashboard</div>
+    <div class="screen">
+      <div class="notch"><div class="pill"></div></div>
+      <div class="status"><span>9:41</span><span>●●● 4G 100%</span></div>
+      <div class="body">
+        <div class="app-header" style="position:relative;">
+          <div class="bell">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 3a5 5 0 00-5 5v3.5L5 15v1h14v-1l-2-3.5V8a5 5 0 00-5-5z" fill="#F3EFE3"/></svg>
+          </div>
+          <div class="greet">Good morning</div>
+          <div class="name">Seth Amoah</div>
+        </div>
+
+        <div style="padding:16px 18px;">
+          <div class="card" style="display:flex;align-items:center;gap:16px;">
+            <div class="ring-wrap" style="width:76px;height:76px;">
+              <svg width="76" height="76" viewBox="0 0 76 76">
+                <circle cx="38" cy="38" r="32" stroke="#EFEAE0" stroke-width="8" fill="none"/>
+                <circle cx="38" cy="38" r="32" stroke="#E1A13D" stroke-width="8" fill="none" stroke-linecap="round" stroke-dasharray="201" stroke-dashoffset="72"/>
+              </svg>
+              <div class="ring-center"><div class="pct" style="font-size:16px;">64%</div><div class="lbl">paid</div></div>
+            </div>
+            <div style="flex:1;">
+              <div style="font-size:11px;color:var(--muted);font-family:var(--font-mono);">OUTSTANDING</div>
+              <div style="font-family:var(--font-display);font-weight:600;font-size:21px;color:var(--forest-deep);">GHS 4,500</div>
+              <div style="font-size:11.5px;color:var(--clay);font-weight:600;margin-top:2px;">Due 25 Aug 2026</div>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:10px;margin-top:14px;">
+            <div class="card" style="flex:1;padding:12px;text-align:center;">
+              <div style="font-size:10.5px;color:var(--muted);font-family:var(--font-mono);">LOAN LIMIT</div>
+              <div style="font-family:var(--font-display);font-weight:600;font-size:16px;color:var(--forest-deep);">GHS 15,000</div>
+            </div>
+            <div class="card" style="flex:1;padding:12px;text-align:center;">
+              <div style="font-size:10.5px;color:var(--muted);font-family:var(--font-mono);">CREDIT SCORE</div>
+              <div style="font-family:var(--font-display);font-weight:600;font-size:16px;color:var(--good);">Good</div>
+            </div>
+          </div>
+
+          <div style="font-size:12px;font-weight:600;color:var(--forest-deep);margin:18px 0 10px;">Quick actions</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <div class="card" style="text-align:center;padding:14px 8px;"><div style="font-size:12.5px;font-weight:600;">Apply for loan</div></div>
+            <div class="card" style="text-align:center;padding:14px 8px;background:var(--forest);"><div style="font-size:12.5px;font-weight:600;color:#F3EFE3;">Repay now</div></div>
+            <div class="card" style="text-align:center;padding:14px 8px;"><div style="font-size:12.5px;font-weight:600;">Statements</div></div>
+            <div class="card" style="text-align:center;padding:14px 8px;"><div style="font-size:12.5px;font-weight:600;">Support</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOAN APPLICATION -->
+  <div class="phone">
+    <div class="phone-cap">Loan application</div>
+    <div class="screen">
+      <div class="notch"><div class="pill"></div></div>
+      <div class="status"><span>9:41</span><span>●●● 4G 100%</span></div>
+      <div class="body" style="padding:26px 22px;">
+        <div style="font-size:11px;color:var(--forest);font-family:var(--font-mono);letter-spacing:.05em;">STEP 1 OF 3</div>
+        <div style="font-family:var(--font-display);font-weight:600;font-size:22px;color:var(--forest-deep);margin:4px 0 22px;">Apply for a loan</div>
+
+        <div class="field-label">Loan amount</div>
+        <div class="field" style="margin-bottom:16px;font-family:var(--font-display);font-size:17px;font-weight:600;color:var(--forest-deep);">GHS 5,000</div>
+
+        <div class="field-label">Purpose</div>
+        <div class="field" style="margin-bottom:16px;">Business expansion</div>
+
+        <div class="field-label">Repayment period</div>
+        <div class="field" style="margin-bottom:20px;">12 months</div>
+
+        <div class="card" style="background:var(--gold-soft);box-shadow:none;">
+          <div style="font-size:11px;color:#8A5A17;font-family:var(--font-mono);">EST. MONTHLY PAYMENT</div>
+          <div style="font-family:var(--font-display);font-weight:600;font-size:22px;color:var(--forest-deep);">GHS 520</div>
+          <div style="font-size:11px;color:#8A5A17;">Includes interest &amp; fees</div>
+        </div>
+
+        <div class="btn" style="margin-top:22px;">Continue</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DOCUMENT UPLOAD -->
+  <div class="phone">
+    <div class="phone-cap">Document upload</div>
+    <div class="screen">
+      <div class="notch"><div class="pill"></div></div>
+      <div class="status"><span>9:41</span><span>●●● 4G 100%</span></div>
+      <div class="body" style="padding:26px 22px;">
+        <div style="font-size:11px;color:var(--forest);font-family:var(--font-mono);letter-spacing:.05em;">STEP 2 OF 3</div>
+        <div style="font-family:var(--font-display);font-weight:600;font-size:22px;color:var(--forest-deep);margin:4px 0 22px;">Upload documents</div>
+
+        <div class="card" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+          <span style="font-size:13px;font-weight:600;">Ghana Card</span><span class="tag on">Uploaded</span>
+        </div>
+        <div class="card" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+          <span style="font-size:13px;font-weight:600;">Passport photo</span><span class="tag on">Uploaded</span>
+        </div>
+        <div class="card" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+          <span style="font-size:13px;font-weight:600;">Payslip / statement</span><span class="tag wait">Pending</span>
+        </div>
+
+        <div style="border:1.5px dashed var(--forest);border-radius:14px;padding:26px 16px;text-align:center;color:var(--forest);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" style="margin-bottom:8px;"><path d="M12 4v12m0-12l-5 5m5-5l5 5M5 20h14" stroke="var(--forest)" stroke-width="2" stroke-linecap="round"/></svg>
+          <div style="font-size:12.5px;font-weight:600;">Upload document</div>
+        </div>
+
+        <div class="btn ghost" style="margin-top:26px;">Back</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOAN TRACKING -->
+  <div class="phone">
+    <div class="phone-cap">Application status</div>
+    <div class="screen">
+      <div class="notch"><div class="pill"></div></div>
+      <div class="status"><span>9:41</span><span>●●● 4G 100%</span></div>
+      <div class="body" style="padding:26px 22px;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div style="font-family:var(--font-display);font-weight:600;font-size:22px;color:var(--forest-deep);">Loan status</div>
+          <span class="tag wait">In review</span>
+        </div>
+
+        <div style="margin-top:26px;">
+          <div style="display:flex;gap:12px;margin-bottom:20px;">
+            <div style="width:22px;display:flex;flex-direction:column;align-items:center;">
+              <div style="width:22px;height:22px;border-radius:50%;background:var(--good);"></div>
+              <div style="width:2px;flex:1;background:var(--good);margin-top:2px;"></div>
+            </div>
+            <div><div style="font-size:13.5px;font-weight:600;">Application submitted</div><div style="font-size:11px;color:var(--muted);">18 Jul, 10:04 AM</div></div>
+          </div>
+          <div style="display:flex;gap:12px;margin-bottom:20px;">
+            <div style="width:22px;display:flex;flex-direction:column;align-items:center;">
+              <div style="width:22px;height:22px;border-radius:50%;background:var(--good);"></div>
+              <div style="width:2px;flex:1;background:var(--good);margin-top:2px;"></div>
+            </div>
+            <div><div style="font-size:13.5px;font-weight:600;">Documents verified</div><div style="font-size:11px;color:var(--muted);">18 Jul, 2:40 PM</div></div>
+          </div>
+          <div style="display:flex;gap:12px;margin-bottom:20px;">
+            <div style="width:22px;display:flex;flex-direction:column;align-items:center;">
+              <div style="width:22px;height:22px;border-radius:50%;background:var(--gold);"></div>
+              <div style="width:2px;flex:1;background:var(--line);margin-top:2px;"></div>
+            </div>
+            <div><div style="font-size:13.5px;font-weight:600;">Credit review in progress</div><div style="font-size:11px;color:var(--muted);">Expected within 24 hrs</div></div>
+          </div>
+          <div style="display:flex;gap:12px;">
+            <div style="width:22px;height:22px;border-radius:50%;background:var(--line);"></div>
+            <div><div style="font-size:13.5px;font-weight:600;color:var(--muted);">Disbursement</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REPAYMENT -->
+  <div class="phone">
+    <div class="phone-cap">Repayment</div>
+    <div class="screen">
+      <div class="notch"><div class="pill"></div></div>
+      <div class="status"><span>9:41</span><span>●●● 4G 100%</span></div>
+      <div class="body" style="padding:26px 22px;">
+        <div style="font-family:var(--font-display);font-weight:600;font-size:22px;color:var(--forest-deep);margin-bottom:20px;">Repay loan</div>
+
+        <div class="card" style="display:flex;justify-content:space-between;margin-bottom:22px;">
+          <div><div style="font-size:10.5px;color:var(--muted);font-family:var(--font-mono);">AMOUNT DUE</div><div style="font-family:var(--font-display);font-weight:600;font-size:19px;">GHS 520</div></div>
+          <div style="text-align:right;"><div style="font-size:10.5px;color:var(--muted);font-family:var(--font-mono);">DUE DATE</div><div style="font-weight:600;font-size:14px;color:var(--clay);">25 Aug</div></div>
+        </div>
+
+        <div style="font-size:12px;font-weight:600;color:var(--forest-deep);margin-bottom:10px;">Payment method</div>
+        <div class="card" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;border:1.5px solid var(--forest);">
+          <span style="font-size:13px;font-weight:600;">MTN Mobile Money</span>
+          <div style="width:16px;height:16px;border-radius:50%;background:var(--forest);"></div>
+        </div>
+        <div class="card" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+          <span style="font-size:13px;">Telecel Cash</span>
+          <div style="width:16px;height:16px;border-radius:50%;border:1.5px solid var(--line);"></div>
+        </div>
+        <div class="card" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;">
+          <span style="font-size:13px;">Bank transfer</span>
+          <div style="width:16px;height:16px;border-radius:50%;border:1.5px solid var(--line);"></div>
+        </div>
+
+        <div class="btn gold">Pay GHS 520 now</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ============ ADMIN ============ -->
+<div class="section-wrap">
+<div class="section-label"><span class="num">02</span><h2>Staff / admin dashboard</h2></div>
+</div>
+<div class="rail">
+  <div class="phone" style="width:340px;">
+    <div class="phone-cap">Loan officer view — tablet</div>
+    <div class="screen" style="width:340px;height:520px;border-radius:20px;">
+      <div class="status" style="background:var(--forest-deep);"><span>Bills Macrocredit — Staff</span><span>9:41</span></div>
+      <div class="body" style="padding:20px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+          <div style="font-family:var(--font-display);font-weight:600;font-size:19px;color:var(--forest-deep);">Admin dashboard</div>
+          <span class="tag off">Staff</span>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;margin-bottom:20px;">
+          <div class="card" style="text-align:center;padding:12px 6px;"><div style="font-family:var(--font-display);font-weight:600;font-size:20px;color:var(--forest-deep);">128</div><div style="font-size:9.5px;color:var(--muted);">Applications</div></div>
+          <div class="card" style="text-align:center;padding:12px 6px;"><div style="font-family:var(--font-display);font-weight:600;font-size:20px;color:var(--good);">42</div><div style="font-size:9.5px;color:var(--muted);">Today</div></div>
+          <div class="card" style="text-align:center;padding:12px 6px;"><div style="font-family:var(--font-display);font-weight:600;font-size:20px;color:#8A5A17;">56</div><div style="font-size:9.5px;color:var(--muted);">Pending</div></div>
+          <div class="card" style="text-align:center;padding:12px 6px;"><div style="font-family:var(--font-display);font-weight:600;font-size:20px;color:var(--clay);">18</div><div style="font-size:9.5px;color:var(--muted);">Overdue</div></div>
+        </div>
+
+        <div style="font-size:12px;font-weight:600;color:var(--forest-deep);margin-bottom:10px;">Recent applications</div>
+        <div class="card" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <div><div style="font-size:12.5px;font-weight:600;">A. Mensah — GHS 3,200</div><div style="font-size:10.5px;color:var(--muted);">Submitted 08:14</div></div>
+          <span class="tag wait">Review</span>
+        </div>
+        <div class="card" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <div><div style="font-size:12.5px;font-weight:600;">K. Owusu — GHS 8,000</div><div style="font-size:10.5px;color:var(--muted);">Submitted 08:02</div></div>
+          <span class="tag on">Approved</span>
+        </div>
+        <div class="card" style="display:flex;justify-content:space-between;align-items:center;">
+          <div><div style="font-size:12.5px;font-weight:600;">R. Boateng — GHS 1,500</div><div style="font-size:10.5px;color:var(--muted);">Submitted 07:47</div></div>
+          <span class="tag off">Declined</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div>Bills Macrocredit Digital Finance Platform — visual concept, v1</div>
+  <div>Prepared by <b>Seth Reynald Amoah</b></div>
+</footer>
+
+</body>
+</html>
