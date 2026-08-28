@@ -6,23 +6,60 @@
 <title>Seth Reynald Amoah | IT & Digital Innovation</title>
 <meta name="description" content="Professional portfolio of Seth Reynald Amoah, an aspiring software developer and digital innovation enthusiast.">
 <style>
-body{font-family:Arial,sans-serif;margin:0;background:#f5f7fa;color:#17202a;line-height:1.6}
-header{background:#111827;color:white;padding:60px 20px;text-align:center}
-header h1{margin:0;font-size:36px}
-header p{font-size:18px}
-main{max-width:850px;margin:30px auto;padding:0 20px}
-section{background:white;padding:28px;margin-bottom:20px;border-radius:14px;box-shadow:0 4px 18px rgba(0,0,0,.06)}
-h2{margin-top:0}
-.skills span{display:inline-block;background:#eef2ff;padding:8px 12px;border-radius:20px;margin:5px}
-footer{text-align:center;padding:30px;color:#667085}
+*{box-sizing:border-box}body{font-family:Arial,sans-serif;margin:0;background:#f5f7fa;color:#17202a;line-height:1.6}header{background:#111827;color:white;padding:45px 20px;text-align:center}header h1{margin:0;font-size:36px}header p{font-size:18px}.auth-nav{margin-top:22px;display:flex;justify-content:center;gap:10px;flex-wrap:wrap}.btn{border:0;border-radius:9px;padding:11px 16px;font-weight:700;cursor:pointer;background:#111827;color:white}.btn.secondary{background:white;color:#111827}.btn.danger{background:#b42318}.auth-nav .btn{border:1px solid rgba(255,255,255,.35)}main{max-width:850px;margin:30px auto;padding:0 20px}section{background:white;padding:28px;margin-bottom:20px;border-radius:14px;box-shadow:0 4px 18px rgba(0,0,0,.06)}h2{margin-top:0}.skills span{display:inline-block;background:#eef2ff;padding:8px 12px;border-radius:20px;margin:5px}.auth-card{display:none}.auth-card.active{display:block}.form-group{margin-bottom:15px}.form-group label{display:block;font-weight:700;margin-bottom:6px}.form-group input{width:100%;padding:12px;border:1px solid #d0d5dd;border-radius:8px;font-size:16px}.message{margin-top:14px;padding:11px;border-radius:8px;display:none}.message.show{display:block}.message.error{background:#fef3f2;color:#b42318}.message.success{background:#ecfdf3;color:#027a48}.account-info{background:#f8fafc;padding:15px;border-radius:10px;margin:15px 0}.muted{color:#667085;font-size:14px}.link-btn{background:none;border:0;color:#175cd3;padding:0;cursor:pointer;font-weight:700}footer{text-align:center;padding:30px;color:#667085}
 </style>
 </head>
 <body>
 <header>
 <h1>Seth Reynald Amoah</h1>
 <p>IT Enthusiast | Aspiring Software Developer | Digital Innovation Enthusiast</p>
+<nav class="auth-nav" aria-label="Account navigation">
+<button id="loginNav" class="btn secondary" type="button">Log In</button>
+<button id="signupNav" class="btn" type="button">Create Account</button>
+<button id="accountNav" class="btn" type="button" hidden>My Account</button>
+<button id="logoutNav" class="btn danger" type="button" hidden>Log Out</button>
+</nav>
 </header>
+
 <main>
+<section id="authSection" class="auth-card">
+<h2 id="authTitle">Log In</h2>
+<p id="authSubtitle" class="muted">Access your account securely.</p>
+<form id="authForm">
+<div class="form-group" id="nameGroup" hidden>
+<label for="fullName">Full name</label>
+<input id="fullName" type="text" autocomplete="name">
+</div>
+<div class="form-group">
+<label for="email">Email address</label>
+<input id="email" type="email" autocomplete="email" required>
+</div>
+<div class="form-group">
+<label for="password">Password</label>
+<input id="password" type="password" minlength="6" autocomplete="current-password" required>
+</div>
+<div class="form-group" id="confirmGroup" hidden>
+<label for="confirmPassword">Confirm password</label>
+<input id="confirmPassword" type="password" minlength="6" autocomplete="new-password">
+</div>
+<button id="submitAuth" class="btn" type="submit">Log In</button>
+</form>
+<p id="forgotWrap"><button id="forgotBtn" class="link-btn" type="button">Forgot password?</button></p>
+<p id="switchText" class="muted">Don't have an account? <button id="switchBtn" class="link-btn" type="button">Create one</button></p>
+<div id="authMessage" class="message" role="alert"></div>
+</section>
+
+<section id="accountSection" class="auth-card">
+<h2>My Account</h2>
+<p>You're signed in.</p>
+<div class="account-info">
+<strong>Email</strong><br><span id="accountEmail"></span>
+<br><br><strong>Name</strong><br><span id="accountName"></span>
+</div>
+<p class="muted">Your password is handled by Supabase Authentication and is not stored in this website's code.</p>
+<button id="logoutAccount" class="btn danger" type="button">Log Out</button>
+</section>
+
 <section>
 <h2>Professional Summary</h2>
 <p>Passionate and ambitious IT enthusiast with a strong interest in software development, digital innovation, and technology-driven problem solving. I am continuously developing my technical knowledge and practical skills to transform creative ideas into meaningful digital solutions. I am building my understanding of software design, development, user experience, and technology entrepreneurship through independent learning and practical work.</p>
@@ -34,11 +71,7 @@ footer{text-align:center;padding:30px;color:#667085}
 </section>
 <section>
 <h2>Areas of Interest</h2>
-<div class="skills">
-<span>Software Development</span><span>Information Technology</span><span>Digital Innovation</span>
-<span>Mobile App Development</span><span>UI/UX Design</span><span>Technology Entrepreneurship</span>
-<span>Problem Solving</span><span>Continuous Learning</span>
-</div>
+<div class="skills"><span>Software Development</span><span>Information Technology</span><span>Digital Innovation</span><span>Mobile App Development</span><span>UI/UX Design</span><span>Technology Entrepreneurship</span><span>Problem Solving</span><span>Continuous Learning</span></div>
 </section>
 <section>
 <h2>Personal Attributes</h2>
@@ -46,5 +79,124 @@ footer{text-align:center;padding:30px;color:#667085}
 </section>
 </main>
 <footer>© Seth Reynald Amoah | Ghana</footer>
+
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+const SUPABASE_URL = 'https://wnqbwpaustanpugdhuuk.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_sHH_CJ6Pn6mEz09xuDQ8Bw_cU0NbopA';
+const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+const $ = (id) => document.getElementById(id);
+let mode = 'login';
+
+function showMessage(text, type='success') {
+  const box = $('authMessage');
+  box.textContent = text;
+  box.className = `message show ${type}`;
+}
+function clearMessage() {
+  $('authMessage').className = 'message';
+  $('authMessage').textContent = '';
+}
+function setMode(nextMode) {
+  mode = nextMode;
+  clearMessage();
+  const signup = mode === 'signup';
+  $('authTitle').textContent = signup ? 'Create Account' : 'Log In';
+  $('authSubtitle').textContent = signup ? 'Create your account with email and password.' : 'Access your account securely.';
+  $('nameGroup').hidden = !signup;
+  $('confirmGroup').hidden = !signup;
+  $('fullName').required = signup;
+  $('confirmPassword').required = signup;
+  $('password').autocomplete = signup ? 'new-password' : 'current-password';
+  $('submitAuth').textContent = signup ? 'Create Account' : 'Log In';
+  $('forgotWrap').hidden = signup;
+  $('switchText').innerHTML = signup ? 'Already have an account? <button id="switchBtn" class="link-btn" type="button">Log in</button>' : 'Don\'t have an account? <button id="switchBtn" class="link-btn" type="button">Create one</button>';
+  $('switchBtn').addEventListener('click', () => setMode(signup ? 'login' : 'signup'));
+}
+function showAuth() {
+  $('authSection').classList.add('active');
+  $('accountSection').classList.remove('active');
+  $('authSection').scrollIntoView({behavior:'smooth', block:'start'});
+}
+function showAccount(user) {
+  $('authSection').classList.remove('active');
+  $('accountSection').classList.add('active');
+  $('accountEmail').textContent = user.email || '—';
+  $('accountName').textContent = user.user_metadata?.full_name || 'Not provided';
+  $('accountNav').hidden = false;
+  $('logoutNav').hidden = false;
+  $('loginNav').hidden = true;
+  $('signupNav').hidden = true;
+}
+function showLoggedOut() {
+  $('accountSection').classList.remove('active');
+  $('accountNav').hidden = true;
+  $('logoutNav').hidden = true;
+  $('loginNav').hidden = false;
+  $('signupNav').hidden = false;
+}
+
+$('loginNav').addEventListener('click', () => { setMode('login'); showAuth(); });
+$('signupNav').addEventListener('click', () => { setMode('signup'); showAuth(); });
+$('accountNav').addEventListener('click', () => $('accountSection').scrollIntoView({behavior:'smooth'}));
+$('logoutNav').addEventListener('click', async () => { const {error} = await supabase.auth.signOut(); if(error) showMessage(error.message,'error'); });
+$('logoutAccount').addEventListener('click', async () => { const {error} = await supabase.auth.signOut(); if(error) showMessage(error.message,'error'); });
+
+$('authForm').addEventListener('submit', async (event) => {
+  event.preventDefault();
+  clearMessage();
+  const email = $('email').value.trim();
+  const password = $('password').value;
+  const fullName = $('fullName').value.trim();
+  const confirm = $('confirmPassword').value;
+  const button = $('submitAuth');
+  button.disabled = true;
+
+  try {
+    if (mode === 'signup') {
+      if (password !== confirm) throw new Error('Passwords do not match.');
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: { data: { full_name: fullName } }
+      });
+      if (error) throw error;
+      if (data.session) {
+        showAccount(data.user);
+      } else {
+        showMessage('Account created. Check your email to confirm your account before logging in.');
+      }
+    } else {
+      const { data, error } = await supabase.auth.signInWithPassword({email, password});
+      if (error) throw error;
+      showAccount(data.user);
+    }
+  } catch (error) {
+    showMessage(error.message || 'Authentication failed. Please try again.', 'error');
+  } finally {
+    button.disabled = false;
+  }
+});
+
+$('forgotBtn').addEventListener('click', async () => {
+  clearMessage();
+  const email = $('email').value.trim();
+  if (!email) { showMessage('Enter your email address first.', 'error'); return; }
+  const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin });
+  if (error) showMessage(error.message, 'error');
+  else showMessage('If an account exists for that email, a password-reset link has been sent.');
+});
+
+supabase.auth.onAuthStateChange((_event, session) => {
+  if (session?.user) showAccount(session.user);
+  else showLoggedOut();
+});
+
+setMode('login');
+const { data: { session } } = await supabase.auth.getSession();
+if (session?.user) showAccount(session.user); else showLoggedOut();
+</script>
 </body>
 </html>
