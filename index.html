@@ -6,7 +6,7 @@
 <title>Seth Reynald Amoah | IT & Digital Innovation</title>
 <meta name="description" content="Professional portfolio of Seth Reynald Amoah, an aspiring software developer and digital innovation enthusiast.">
 <style>
-*{box-sizing:border-box}body{font-family:Arial,sans-serif;margin:0;background:#f5f7fa;color:#17202a;line-height:1.6}header{background:#111827;color:white;padding:45px 20px;text-align:center}header h1{margin:0;font-size:36px}header p{font-size:18px}.auth-nav{margin-top:22px;display:flex;justify-content:center;gap:10px;flex-wrap:wrap}.btn{border:0;border-radius:9px;padding:11px 16px;font-weight:700;cursor:pointer;background:#111827;color:white}.btn.secondary{background:white;color:#111827}.btn.danger{background:#b42318}.auth-nav .btn{border:1px solid rgba(255,255,255,.35)}main{max-width:850px;margin:30px auto;padding:0 20px}section{background:white;padding:28px;margin-bottom:20px;border-radius:14px;box-shadow:0 4px 18px rgba(0,0,0,.06)}h2{margin-top:0}.skills span{display:inline-block;background:#eef2ff;padding:8px 12px;border-radius:20px;margin:5px}.auth-card{display:none}.auth-card.active{display:block}.form-group{margin-bottom:15px}.form-group label{display:block;font-weight:700;margin-bottom:6px}.form-group input{width:100%;padding:12px;border:1px solid #d0d5dd;border-radius:8px;font-size:16px}.message{margin-top:14px;padding:11px;border-radius:8px;display:none}.message.show{display:block}.message.error{background:#fef3f2;color:#b42318}.message.success{background:#ecfdf3;color:#027a48}.account-info{background:#f8fafc;padding:15px;border-radius:10px;margin:15px 0}.muted{color:#667085;font-size:14px}.link-btn{background:none;border:0;color:#175cd3;padding:0;cursor:pointer;font-weight:700}footer{text-align:center;padding:30px;color:#667085}
+*{box-sizing:border-box}body{font-family:Arial,sans-serif;margin:0;background:#f5f7fa;color:#17202a;line-height:1.6}header{background:#111827;color:white;padding:45px 20px;text-align:center}header h1{margin:0;font-size:36px}header p{font-size:18px}.auth-nav{margin-top:22px;display:flex;justify-content:center;gap:10px;flex-wrap:wrap}.btn{border:0;border-radius:9px;padding:11px 16px;font-weight:700;cursor:pointer;background:#111827;color:white}.btn.secondary{background:white;color:#111827}.btn.danger{background:#b42318}.auth-nav .btn{border:1px solid rgba(255,255,255,.35)}main{max-width:850px;margin:30px auto;padding:0 20px}section{background:white;padding:28px;margin-bottom:20px;border-radius:14px;box-shadow:0 4px 18px rgba(0,0,0,.06)}h2{margin-top:0}.skills span{display:inline-block;background:#eef2ff;padding:8px 12px;border-radius:20px;margin:5px}.auth-card{display:none}.auth-card.active{display:block}.form-group{margin-bottom:15px}.form-group label{display:block;font-weight:700;margin-bottom:6px}.form-group input{width:100%;padding:12px;border:1px solid #d0d5dd;border-radius:8px;font-size:16px}.message{margin-top:14px;padding:11px;border-radius:8px;display:none}.message.show{display:block}.message.error{background:#fef3f2;color:#b42318}.message.success{background:#ecfdf3;color:#027a48}.account-info{background:#f8fafc;padding:15px;border-radius:10px;margin:15px 0}.muted{color:#667085;font-size:14px}.link-btn{background:none;border:0;color:#175cd3;padding:0;cursor:pointer;font-weight:700}.profile-status{margin-top:10px}.loading{opacity:.7}footer{text-align:center;padding:30px;color:#667085}
 </style>
 </head>
 <body>
@@ -52,9 +52,10 @@
 <section id="accountSection" class="auth-card">
 <h2>My Account</h2>
 <p>You're signed in.</p>
-<div class="account-info">
+<div class="account-info" id="profileBox">
 <strong>Email</strong><br><span id="accountEmail"></span>
-<br><br><strong>Name</strong><br><span id="accountName"></span>
+<br><br><strong>Name</strong><br><span id="accountName">Loading profile...</span>
+<p id="profileStatus" class="muted profile-status"></p>
 </div>
 <p class="muted">Your password is handled by Supabase Authentication and is not stored in this website's code.</p>
 <button id="logoutAccount" class="btn danger" type="button">Log Out</button>
@@ -120,15 +121,37 @@ function showAuth() {
   $('accountSection').classList.remove('active');
   $('authSection').scrollIntoView({behavior:'smooth', block:'start'});
 }
+async function loadProfile(user) {
+  $('accountEmail').textContent = user.email || '—';
+  $('accountName').textContent = 'Loading profile...';
+  $('profileStatus').textContent = '';
+  $('profileBox').classList.add('loading');
+
+  const { data: profile, error } = await supabase
+    .from('profiles')
+    .select('full_name')
+    .eq('id', user.id)
+    .single();
+
+  $('profileBox').classList.remove('loading');
+
+  if (error) {
+    $('accountName').textContent = user.user_metadata?.full_name || 'Not available';
+    $('profileStatus').textContent = 'Profile data could not be loaded.';
+    return;
+  }
+
+  $('accountName').textContent = profile?.full_name || user.user_metadata?.full_name || 'Not provided';
+  $('profileStatus').textContent = 'Profile loaded securely from your protected account data.';
+}
 function showAccount(user) {
   $('authSection').classList.remove('active');
   $('accountSection').classList.add('active');
-  $('accountEmail').textContent = user.email || '—';
-  $('accountName').textContent = user.user_metadata?.full_name || 'Not provided';
   $('accountNav').hidden = false;
   $('logoutNav').hidden = false;
   $('loginNav').hidden = true;
   $('signupNav').hidden = true;
+  loadProfile(user);
 }
 function showLoggedOut() {
   $('accountSection').classList.remove('active');
