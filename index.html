@@ -55,6 +55,16 @@
 <div class="account-info" id="profileBox">
 <strong>Email</strong><br><span id="accountEmail"></span>
 <br><br><strong>Name</strong><br><span id="accountName">Loading profile...</span>
+<div class="form-group" id="editNameGroup" hidden>
+<label for="editFullName">Edit your full name</label>
+<input id="editFullName" type="text" autocomplete="name" maxlength="100">
+</div>
+<div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
+<button id="editProfileBtn" class="btn secondary" type="button">Edit Profile</button>
+<button id="saveProfileBtn" class="btn" type="button" hidden>Save Changes</button>
+<button id="cancelProfileBtn" class="btn secondary" type="button" hidden>Cancel</button>
+</div>
+<p id="profileMessage" class="message" role="alert"></p>
 <p id="profileStatus" class="muted profile-status"></p>
 </div>
 <p class="muted">Your password is handled by Supabase Authentication and is not stored in this website's code.</p>
@@ -90,6 +100,8 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
 const $ = (id) => document.getElementById(id);
 let mode = 'login';
+let currentUser = null;
+let originalFullName = '';
 
 function showMessage(text, type='success') {
   const box = $('authMessage');
@@ -99,6 +111,15 @@ function showMessage(text, type='success') {
 function clearMessage() {
   $('authMessage').className = 'message';
   $('authMessage').textContent = '';
+}
+function showProfileMessage(text, type='success') {
+  const box = $('profileMessage');
+  box.textContent = text;
+  box.className = `message show ${type}`;
+}
+function clearProfileMessage() {
+  $('profileMessage').className = 'message';
+  $('profileMessage').textContent = '';
 }
 function setMode(nextMode) {
   mode = nextMode;
@@ -122,9 +143,12 @@ function showAuth() {
   $('authSection').scrollIntoView({behavior:'smooth', block:'start'});
 }
 async function loadProfile(user) {
+  currentUser = user;
   $('accountEmail').textContent = user.email || '—';
   $('accountName').textContent = 'Loading profile...';
+  $('editFullName').value = '';
   $('profileStatus').textContent = '';
+  clearProfileMessage();
   $('profileBox').classList.add('loading');
 
   const { data: profile, error } = await supabase
@@ -136,15 +160,19 @@ async function loadProfile(user) {
   $('profileBox').classList.remove('loading');
 
   if (error) {
-    $('accountName').textContent = user.user_metadata?.full_name || 'Not available';
+    originalFullName = user.user_metadata?.full_name || '';
+    $('accountName').textContent = originalFullName || 'Not available';
     $('profileStatus').textContent = 'Profile data could not be loaded.';
     return;
   }
 
-  $('accountName').textContent = profile?.full_name || user.user_metadata?.full_name || 'Not provided';
+  originalFullName = profile?.full_name || user.user_metadata?.full_name || '';
+  $('accountName').textContent = originalFullName || 'Not provided';
+  $('editFullName').value = originalFullName;
   $('profileStatus').textContent = 'Profile loaded securely from your protected account data.';
 }
 function showAccount(user) {
+  currentUser = user;
   $('authSection').classList.remove('active');
   $('accountSection').classList.add('active');
   $('accountNav').hidden = false;
@@ -154,11 +182,68 @@ function showAccount(user) {
   loadProfile(user);
 }
 function showLoggedOut() {
+  currentUser = null;
   $('accountSection').classList.remove('active');
   $('accountNav').hidden = true;
   $('logoutNav').hidden = true;
   $('loginNav').hidden = false;
   $('signupNav').hidden = false;
+}
+function startEditingProfile() {
+  clearProfileMessage();
+  $('editFullName').value = originalFullName;
+  $('accountName').hidden = true;
+  $('editNameGroup').hidden = false;
+  $('editProfileBtn').hidden = true;
+  $('saveProfileBtn').hidden = false;
+  $('cancelProfileBtn').hidden = false;
+  $('editFullName').focus();
+}
+function cancelEditingProfile() {
+  clearProfileMessage();
+  $('editFullName').value = originalFullName;
+  $('accountName').hidden = false;
+  $('editNameGroup').hidden = true;
+  $('editProfileBtn').hidden = false;
+  $('saveProfileBtn').hidden = true;
+  $('cancelProfileBtn').hidden = true;
+}
+async function saveProfile() {
+  if (!currentUser) {
+    showProfileMessage('You must be logged in to update your profile.', 'error');
+    return;
+  }
+  const fullName = $('editFullName').value.trim();
+  if (!fullName) {
+    showProfileMessage('Please enter your full name.', 'error');
+    return;
+  }
+
+  clearProfileMessage();
+  $('saveProfileBtn').disabled = true;
+  $('saveProfileBtn').textContent = 'Saving...';
+
+  try {
+    const { data, error } = await supabase
+      .from('profiles')
+      .update({ full_name: fullName, updated_at: new Date().toISOString() })
+      .eq('id', currentUser.id)
+      .select('full_name')
+      .single();
+
+    if (error) throw error;
+
+    originalFullName = data.full_name || fullName;
+    $('accountName').textContent = originalFullName;
+    cancelEditingProfile();
+    showProfileMessage('Profile updated successfully.', 'success');
+    $('profileStatus').textContent = 'Your updated profile is protected by Supabase Row Level Security.';
+  } catch (error) {
+    showProfileMessage(error.message || 'Unable to update your profile.', 'error');
+  } finally {
+    $('saveProfileBtn').disabled = false;
+    $('saveProfileBtn').textContent = 'Save Changes';
+  }
 }
 
 $('loginNav').addEventListener('click', () => { setMode('login'); showAuth(); });
@@ -166,6 +251,9 @@ $('signupNav').addEventListener('click', () => { setMode('signup'); showAuth(); 
 $('accountNav').addEventListener('click', () => $('accountSection').scrollIntoView({behavior:'smooth'}));
 $('logoutNav').addEventListener('click', async () => { const {error} = await supabase.auth.signOut(); if(error) showMessage(error.message,'error'); });
 $('logoutAccount').addEventListener('click', async () => { const {error} = await supabase.auth.signOut(); if(error) showMessage(error.message,'error'); });
+$('editProfileBtn').addEventListener('click', startEditingProfile);
+$('cancelProfileBtn').addEventListener('click', cancelEditingProfile);
+$('saveProfileBtn').addEventListener('click', saveProfile);
 
 $('authForm').addEventListener('submit', async (event) => {
   event.preventDefault();
